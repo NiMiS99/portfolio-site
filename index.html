@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NiMiS99 — Sviluppatore & Maker</title>
+    <meta name="description" content="Portfolio di NiMiS99 — Sviluppatore software, bot Telegram/Discord, automazioni, progetti TCG e web.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💻</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0f;
+            --bg-card: #13131a;
+            --bg-hover: #1a1a25;
+            --border: #2a2a3a;
+            --text: #e4e4e7;
+            --text-muted: #71717a;
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent: #f59e0b;
+            --green: #10b981;
+            --blue: #3b82f6;
+            --red: #ef4444;
+            --purple: #a855f7;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg); color: var(--text);
+            line-height: 1.7; overflow-x: hidden;
+        }
+        a { color: var(--primary-light); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--text); }
+
+        /* Nav */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        nav .brand { font-weight: 800; font-size: 1.25rem; }
+        nav .brand span { color: var(--primary); }
+        nav ul { display: flex; gap: 1.5rem; list-style: none; }
+        nav a { color: var(--text-muted); font-size: 0.9rem; }
+        nav a:hover { color: var(--text); }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 6rem 2rem;
+            background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99,102,241,0.15), transparent);
+        }
+        .hero-avatar {
+            width: 120px; height: 120px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--purple));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; margin: 0 auto 1.5rem;
+            border: 3px solid var(--border);
+        }
+        .hero h1 {
+            font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--text), var(--primary-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero .tagline { font-size: 1.25rem; color: var(--text-muted); margin-bottom: 1rem; }
+        .hero .bio { max-width: 600px; margin: 0 auto 2rem; color: var(--text-muted); }
+        .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 0.75rem 1.75rem; border-radius: 10px; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-outline { border: 1px solid var(--border); color: var(--text); }
+        .btn-outline:hover { border-color: var(--primary); background: var(--bg-hover); }
+
+        /* Sections */
+        section { padding: 5rem 2rem; max-width: 1000px; margin: 0 auto; }
+        section h2 {
+            font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        section .subtitle { color: var(--text-muted); margin-bottom: 2.5rem; }
+
+        /* About */
+        .about-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+        @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+        .about-text p { margin-bottom: 1rem; color: var(--text-muted); }
+        .about-stats { display: grid; gap: 1rem; }
+        .stat-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.5rem; text-align: center;
+        }
+        .stat-card .num { font-size: 2rem; font-weight: 800; color: var(--primary); }
+        .stat-card .label { color: var(--text-muted); font-size: 0.85rem; }
+
+        /* Skills */
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+        .skill-category {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.5rem;
+        }
+        .skill-category h3 { font-size: 1rem; margin-bottom: 1rem; color: var(--primary-light); }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .skill-tag {
+            background: var(--bg-hover); border: 1px solid var(--border);
+            padding: 0.3rem 0.75rem; border-radius: 6px; font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Projects */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .project-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.5rem; transition: all 0.2s;
+            display: flex; flex-direction: column;
+        }
+        .project-card:hover { border-color: var(--primary); transform: translateY(-4px); }
+        .project-card .emoji { font-size: 2rem; margin-bottom: 0.75rem; }
+        .project-card h3 { font-size: 1.15rem; margin-bottom: 0.5rem; }
+        .project-card p { color: var(--text-muted); font-size: 0.9rem; flex-grow: 1; margin-bottom: 1rem; }
+        .project-card .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+        .project-card .tag {
+            font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 4px;
+            background: rgba(99,102,241,0.1); color: var(--primary-light);
+        }
+        .project-card .links { display: flex; gap: 0.75rem; }
+        .project-card .links a { font-size: 0.85rem; }
+
+        /* Contact */
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .contact-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.5rem; text-align: center;
+            transition: all 0.2s;
+        }
+        .contact-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .contact-card .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .contact-card h3 { font-size: 0.9rem; margin-bottom: 0.25rem; }
+        .contact-card p { color: var(--text-muted); font-size: 0.85rem; }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem; text-align: center; color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            nav ul { display: none; }
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="brand">Ni<span>MiS</span>99</div>
+    <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Progetti</a></li>
+        <li><a href="#contact">Contatti</a></li>
+    </ul>
+    <a href="https://github.com/NiMiS99" class="btn btn-outline" style="padding:0.5rem 1rem; font-size:0.85rem;">GitHub</a>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+    <div>
+        <div class="hero-avatar">💻</div>
+        <h1>NiMiS99</h1>
+        <p class="tagline">Sviluppatore Software • Bot Telegram & Discord • Web</p>
+        <p class="bio">
+            Sviluppo bot, automazioni, applicazioni web e strumenti per community.
+            Appassionato di TCG, gaming e tecnologia. Sempre alla ricerca di nuovi progetti da costruire.
+        </p>
+        <div class="hero-buttons">
+            <a href="#projects" class="btn btn-primary">📂 Vedi progetti</a>
+            <a href="#contact" class="btn btn-outline">📬 Contattami</a>
+        </div>
+    </div>
+</div>
+
+<!-- About -->
+<section id="about">
+    <h2>👤 About Me</h2>
+    <p class="subtitle">Chi sono e cosa faccio</p>
+    <div class="about-grid">
+        <div class="about-text">
+            <p>Sono uno sviluppatore con una passione per i bot, le automazioni e le community online. Costruisco strumenti che risolvono problemi reali e creano valore per le persone.</p>
+            <p>Lavoro principalmente con TypeScript, Node.js, e framework moderni. Ho esperienza con API di Telegram, Discord, e varie piattaforme di trading di carte.</p>
+            <p>Mi piace costruire prodotti completi — dal backend al frontend, dal database al deploy. Ogni progetto è un'opportunità per imparare qualcosa di nuovo.</p>
+        </div>
+        <div class="about-stats">
+            <div class="stat-card"><div class="num">10+</div><div class="label">Progetti completati</div></div>
+            <div class="stat-card"><div class="num">2</div><div class="label">Bot in produzione</div></div>
+            <div class="stat-card"><div class="num">5+</div><div class="label">Tecnologie principali</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills -->
+<section id="skills">
+    <h2>🛠️ Skills & Tecnologie</h2>
+    <p class="subtitle">Strumenti e tecnologie che uso</p>
+    <div class="skills-grid">
+        <div class="skill-category">
+            <h3>💻 Linguaggi</h3>
+            <div class="skill-tags">
+                <span class="skill-tag">TypeScript</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Node.js</span>
+                <span class="skill-tag">SQL</span>
+                <span class="skill-tag">HTML/CSS</span>
+            </div>
+        </div>
+        <div class="skill-category">
+            <h3>🤖 Bot & API</h3>
+            <div class="skill-tags">
+                <span class="skill-tag">Telegraf</span>
+                <span class="skill-tag">discord.js</span>
+                <span class="skill-tag">Telegram Bot API</span>
+                <span class="skill-tag">Discord API</span>
+                <span class="skill-tag">Stripe</span>
+                <span class="skill-tag">Telegram Stars</span>
+            </div>
+        </div>
+        <div class="skill-category">
+            <h3>🗄️ Database & Backend</h3>
+            <div class="skill-tags">
+                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">Express</span>
+                <span class="skill-tag">JWT Auth</span>
+                <span class="skill-tag">REST API</span>
+                <span class="skill-tag">PM2</span>
+            </div>
+        </div>
+        <div class="skill-category">
+            <h3>🎨 Frontend</h3>
+            <div class="skill-tags">
+                <span class="skill-tag">React</span>
+                <span class="skill-tag">Vite</span>
+                <span class="skill-tag">TailwindCSS</span>
+                <span class="skill-tag">HTML5</span>
+            </div>
+        </div>
+        <div class="skill-category">
+            <h3>🔧 Tools & DevOps</h3>
+            <div class="skill-tags">
+                <span class="skill-tag">Git</span>
+                <span class="skill-tag">GitHub</span>
+                <span class="skill-tag">GitHub Pages</span>
+                <span class="skill-tag">PM2</span>
+                <span class="skill-tag">npm workspaces</span>
+            </div>
+        </div>
+        <div class="skill-category">
+            <h3>📦 Librerie</h3>
+            <div class="skill-tags">
+                <span class="skill-tag">pdfkit</span>
+                <span class="skill-tag">sharp</span>
+                <span class="skill-tag">axios</span>
+                <span class="skill-tag">cheerio</span>
+                <span class="skill-tag">tesseract.js</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects -->
+<section id="projects">
+    <h2>📂 Progetti</h2>
+    <p class="subtitle">Cose che ho costruito</p>
+    <div class="projects-grid">
+
+        <!-- TCG Ecosystem -->
+        <div class="project-card">
+            <div class="emoji">🃏</div>
+            <h3>TCG Ecosystem</h3>
+            <p>Bot Telegram + Discord per collezionisti TCG. Ricerca prezzi, portfolio, alert, news, trading board, scanner carte con OCR, account linking cross-piattaforma. 15 comandi, 8+ TCG supportati.</p>
+            <div class="tags">
+                <span class="tag">TypeScript</span>
+                <span class="tag">Telegraf</span>
+                <span class="tag">discord.js</span>
+                <span class="tag">MySQL</span>
+                <span class="tag">Express</span>
+            </div>
+            <div class="links">
+                <a href="https://t.me/TCGPortalBot">📱 Telegram</a>
+                <a href="https://nimis99.github.io/tcg-ecosystem-site/">🌐 Sito</a>
+                <a href="https://github.com/NiMiS99/tcg-ecosystem">💻 Codice</a>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="project-card">
+            <div class="emoji">📊</div>
+            <h3>TCG Admin Dashboard</h3>
+            <p>Dashboard web per gestione del bot TCG. Statistiche utenti, revenue, news management, alert monitoring. Real-time data visualization.</p>
+            <div class="tags">
+                <span class="tag">React</span>
+                <span class="tag">Vite</span>
+                <span class="tag">Express</span>
+                <span class="tag">JWT</span>
+            </div>
+            <div class="links">
+                <a href="https://github.com/NiMiS99/tcg-ecosystem">💻 Codice</a>
+            </div>
+        </div>
+
+        <!-- Discord Server -->
+        <div class="project-card">
+            <div class="emoji">💬</div>
+            <h3>Discord Community Server</h3>
+            <p>Server Discord completo per community TCG. 8 categorie, 27 canali testuali, 9 vocali, 6 ruoli, slash commands, auto-setup script.</p>
+            <div class="tags">
+                <span class="tag">discord.js</span>
+                <span class="tag">Slash Commands</span>
+                <span class="tag">Automation</span>
+            </div>
+            <div class="links">
+                <a href="https://github.com/NiMiS99/tcg-ecosystem">💻 Codice</a>
+            </div>
+        </div>
+
+        <!-- Landing Page -->
+        <div class="project-card">
+            <div class="emoji">🌐</div>
+            <h3>TCG Ecosystem Website</h3>
+            <p>Landing page per il bot TCG Ecosystem. Design moderno dark mode, responsive, sezioni features, pricing, comandi.</p>
+            <div class="tags">
+                <span class="tag">HTML5</span>
+                <span class="tag">CSS3</span>
+                <span class="tag">GitHub Pages</span>
+            </div>
+            <div class="links">
+                <a href="https://nimis99.github.io/tcg-ecosystem-site/">🌐 Live</a>
+                <a href="https://github.com/NiMiS99/tcg-ecosystem-site">💻 Codice</a>
+            </div>
+        </div>
+
+        <!-- Portfolio Site -->
+        <div class="project-card">
+            <div class="emoji">👤</div>
+            <h3>Portfolio Personale</h3>
+            <p>Questo sito! Portfolio da sviluppatore con sezioni progetti, skills, contatti. Design minimal dark mode.</p>
+            <div class="tags">
+                <span class="tag">HTML5</span>
+                <span class="tag">CSS3</span>
+                <span class="tag">GitHub Pages</span>
+            </div>
+            <div class="links">
+                <a href="https://github.com/NiMiS99/portfolio-site">💻 Codice</a>
+            </div>
+        </div>
+
+        <!-- Placeholder for future projects -->
+        <div class="project-card">
+            <div class="emoji">🚀</div>
+            <h3>Altro in arrivo...</h3>
+            <p>Nuovi progetti in sviluppo. Stay tuned su GitHub per gli aggiornamenti.</p>
+            <div class="tags">
+                <span class="tag">Coming Soon</span>
+            </div>
+            <div class="links">
+                <a href="https://github.com/NiMiS99">💻 GitHub Profile</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+    <h2>📬 Contatti</h2>
+    <p class="subtitle">Vuoi collaborare o hai domande? Contattami!</p>
+    <div class="contact-grid">
+        <a href="https://github.com/NiMiS99" class="contact-card">
+            <div class="icon">💻</div>
+            <h3>GitHub</h3>
+            <p>@NiMiS99</p>
+        </a>
+        <a href="https://t.me/TCGPortalBot" class="contact-card">
+            <div class="icon">📱</div>
+            <h3>Telegram</h3>
+            <p>@TCGPortalBot</p>
+        </a>
+        <a href="https://discord.gg/" class="contact-card">
+            <div class="icon">💬</div>
+            <h3>Discord</h3>
+            <p>TCG Italia</p>
+        </a>
+        <a href="mailto:nimis99@github.com" class="contact-card">
+            <div class="icon">📧</div>
+            <h3>Email</h3>
+            <p>Contattami</p>
+        </a>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 NiMiS99 — Sviluppatore & Maker</p>
+    <p style="margin-top:0.5rem;">
+        <a href="https://github.com/NiMiS99">GitHub</a> •
+        <a href="https://t.me/TCGPortalBot">Telegram</a> •
+        <a href="https://nimis99.github.io/tcg-ecosystem-site/">TCG Ecosystem</a>
+    </p>
+</footer>
+
+</body>
+</html>
